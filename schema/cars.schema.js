@@ -52,7 +52,8 @@ const carSchema = new Schema({
     },
     narxi: {
         type: Number,
-        required: true
+        required: true,
+        min: [0, "Iltimos narxni kiriting!"],
     }
 }, { versionKey: false, timestamps: true })
 
