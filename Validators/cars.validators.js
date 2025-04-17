@@ -1,5 +1,4 @@
 const joi = require("joi")
-const BaseError = require("../Utils/Base.error")
 const currentYear = new Date().getFullYear()
 
 const carsValidator = (data) => {
