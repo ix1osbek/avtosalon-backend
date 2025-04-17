@@ -1,12 +1,11 @@
-const { Schema, default: mongoose } = require('mongoose');
+const { Schema, default: mongoose } = require('mongoose')
 const currentYear = new Date().getFullYear()
 
 const carSchema = new Schema({
     markasi: {
-        type: String,
-        required: true,
-        minLength: [1, "Moshina markasi 1 ta belgidan ko'p bo'lishi kerak!"],
-        maxLength: [70, "Moshina markasi 70 ta belgidan ko'p bo'lmasligi kerak!"]
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "category",
+        required: true
     },
     motor: {
         type: Number,
@@ -25,7 +24,6 @@ const carSchema = new Schema({
         required: true,
         minLength: [0, "Iltimos kiritilgan malumot 1 ta belgidan ko'p bolishi kerak!"],
         maxLength: [150, "Iltimos kiritilgan malumot 150 ta belgidan ko'p bo'lmasligi kerak!"],
-
     },
     deseriptions: {
         type: String,
@@ -55,8 +53,8 @@ const carSchema = new Schema({
         required: true,
         min: [0, "Iltimos narxni kiriting!"],
     }
-}, { versionKey: false, timestamps: true })
+}, { versionKey: false, timestamps: true });
 
-const CarsModel = mongoose.model("Cars", carSchema)
+const CarsModel = mongoose.model("Cars", carSchema);
 
-module.exports = CarsModel
+module.exports = CarsModel;

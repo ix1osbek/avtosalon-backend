@@ -1,5 +1,6 @@
 const BaseError = require("../Utils/Base.error")
 const CategoryModel = require("../schema/category.schema.js")
+const CarsModel = require("../schema/cars.schema.js")
 
 /// POST CATEGORY
 const createCategory = async (req, res) => {
@@ -39,13 +40,20 @@ const getCategories = async (req, res) => {
 const getCategoryById = async (req, res) => {
     try {
         const { id } = req.params
+
         const foundCategory = await CategoryModel.findById(id)
         if (!foundCategory) {
             return res.status(404).json({
                 message: "Category not found",
             })
         }
-        res.status(200).json(foundCategory)
+        
+        const cars = await CarsModel.find({ markasi: id })
+
+        res.status(200).json({
+            category: foundCategory,
+            cars: cars,
+        })
     } catch (error) {
         throw BaseError.BadRequest(400, "Error getting a category", error)
     }
