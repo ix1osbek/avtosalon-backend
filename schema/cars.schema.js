@@ -52,7 +52,8 @@ const carSchema = new Schema({
         type: Number,
         required: true,
         min: [0, "Iltimos narxni kiriting!"],
-    }
+    },
+    imageUrl: { type: String }
 }, { versionKey: false, timestamps: true });
 
 const CarsModel = mongoose.model("Cars", carSchema);
