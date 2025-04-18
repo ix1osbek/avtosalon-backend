@@ -1,13 +1,13 @@
 const express = require("express");
-const { uploadSingle, uploadMultiple } = require("../Middleware/imageMiddleware");
+const { uploadSingle, uploadMultiple } = require("../Middleware/imageMiddleware.js");
 const { uploadSingleImage, uploadMultipleImages } = require("../controller/image_controller.js");
 
-const router = express.Router();
+const imageRout = express.Router();
 
 // Bitta rasm yuklash
-router.post("/upload-single", uploadSingle, uploadSingleImage);
+imageRout.post("/upload-single", uploadSingle, uploadSingleImage);
 
 // Bir nechta rasm yuklash
-router.post("/upload-multiple", uploadMultiple, uploadMultipleImages);
+imageRout.post("/upload-multiple", uploadMultiple, uploadMultipleImages);
 
-module.exports = router
+module.exports = imageRout;

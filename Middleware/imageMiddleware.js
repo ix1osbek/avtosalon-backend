@@ -1,9 +1,6 @@
 const multer = require("multer");
 const path = require("path");
 
-// __dirname’ni CommonJS’da aniqlash
-const __dirname = path.dirname(__filename);
-
 // Multer sozlamalari
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
@@ -22,10 +19,10 @@ const upload = multer({
         }
         cb(null, true);
     },
-    limits: { fileSize: 10 * 1024 * 1024 }, // 5 MB cheklov
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB cheklov
 });
 
 module.exports = {
     uploadSingle: upload.single("image"),
-    uploadMultiple: upload.array("images", 10), // 5 ta rasm bilan cheklash
+    uploadMultiple: upload.array("images", 10), // 10 ta rasm yuklash
 };

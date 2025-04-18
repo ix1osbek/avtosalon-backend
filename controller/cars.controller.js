@@ -7,7 +7,7 @@ const BaseError = require("../Utils/Base.error")
 const createcar = async (req, res) => {
     try {
 
-           const category = await CategoryModel.findOne({ markasi: req.body.markasi });
+           const category = await CategoryModel.findOne({ markasi: req.body.markasi })
 
            if (!category) {
                return res.status(404).json({
@@ -25,7 +25,7 @@ const createcar = async (req, res) => {
                distance: req.body.distance,
                narxi: req.body.narxi
            }
-           await CarsModel.create(carData);
+           await CarsModel.create(carData)
    
            res.status(201).json({
                message: "Car added successfully"
@@ -80,7 +80,7 @@ const deleteCar = async (req, res) => {
 
         if (!foundetCar) {
             return res.status(404).json({
-                message: "Car not found",
+                message: "Car not found"
             })
         }
 

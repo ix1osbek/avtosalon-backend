@@ -5,14 +5,20 @@ const connectDB = require("./config/db.js")
 const carRouter = require("./Routes/car.routes.js")
 const errorMiddleware = require("./Middleware/errorMiddleware.js")
 const categoryRouter = require("./Routes/category.routes.js")
+const imageRout = require("./Routes/image_routes.js")
+const multer = require("multer")
+const authRout = require("./Routes/auth.routes.js")
 
 
 const app = express()
 app.use(cors())
 connectDB()
 app.use(express.json())
+app.use(authRout)
 app.use(carRouter)
 app.use(categoryRouter)
+app.use(multer().any()) // Multer’ni barcha so‘rovlar uchun qo‘llash
+app.use(imageRout)
 
 
 app.use(errorMiddleware)
