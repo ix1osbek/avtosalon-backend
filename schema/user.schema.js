@@ -8,7 +8,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ["user", "admin", "superadmin"],
         default: "user"
-    }
+    },
+    refreshToken: {
+        type: String,
+        default: null,
+      },
 }, { timestamps: true , versionKey: false })
 
 module.exports = mongoose.model("User", UserSchema)
