@@ -10,6 +10,12 @@ const carsValidator = (data) => {
                 "string.max": "Moshina markasi 70 ta belgidan ko'p bo'lmasligi kerak!",
                 "any.required": "Moshina markasi qismi to'ldirilishi shart!"
             }),
+            model: joi.string().required().min(1).max(150).messages({
+                "string.empty": "Moshina modeli stringda kiritilishi shart!",
+                "string.max": "Moshina modeli 150 ta belgidan ko'p bo'lmasligi kerak!",
+                "string.min": "Moshina modeli 1 ta belgidan ko'p bo'lishi kerak!",
+                "any.required": "Moshina modeli qismi to'ldirilishi shart!"
+            }),
             motor: joi.number().required().min(0).max(10).messages({
                 "number.base": "Moshina motori raqamlarda kiritilishi shart!",
                 "number.max": "Moshina motori 10 dan oshmasligi kerak!",
@@ -53,7 +59,15 @@ const carsValidator = (data) => {
                 "number.base": "Iltimos narxni raqamlarda kiriting!",
                 "number.min": "Iltimos narxni 0 dan kam bo'lmasligi kerak!",
                 "any.required": "narxi qismi to'ldirilishi shart!",
-            })
+            }),
+            interiorImages: joi.array().items(joi.string()).messages({
+                "array.base": "Iltimos rasm fayllarini yuklang!",
+                "any.required": "interiorImages qismi to'ldirilishi shart!",
+            }),
+            exteriorImages: joi.array().items(joi.string()).messages({
+                "array.base": "Iltimos rasm fayllarini yuklang!",
+                "any.required": "exteriorImages qismi to'ldirilishi shart!",
+            }),
 
         })
         return carsValidatorSchema.validate(data)

@@ -1,18 +1,18 @@
-const express = require("express");
-const { register, login } = require("../controller/auth.controller.js");
-const { assignAdmin, demoteAdmin } = require("../controller/user.controller.js");
-const { protect, isSuperAdmin } = require("../Middleware/authMiddleware.js");
+const express = require("express")
+const { register, login } = require("../controller/auth.controller.js")
+const { assignAdmin, demoteAdmin } = require("../controller/user.controller.js")
+const { protect, isSuperAdmin } = require("../Middleware/authMiddleware.js")
 
-const authRout = express.Router();
+const authRout = express.Router()
 
-authRout.post("/register", register);
-
-
-authRout.post("/login", login);
-
-authRout.put("/assign-admin/:userId", protect, isSuperAdmin, assignAdmin);
+authRout.post("/register", register)
 
 
-authRout.put("/demote-admin/:userId", protect, isSuperAdmin, demoteAdmin);
+authRout.post("/login", login)
 
-module.exports = authRout;
+authRout.put("/assign-admin/:userId", protect, isSuperAdmin, assignAdmin)
+
+
+authRout.put("/demote-admin/:userId", protect, isSuperAdmin, demoteAdmin)
+
+module.exports = authRout
