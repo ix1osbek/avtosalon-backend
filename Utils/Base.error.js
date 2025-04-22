@@ -33,6 +33,7 @@ class BaseError extends Error {
         error.name = "Forbidden";
         return error;
       }
+      
     
   }
   

@@ -122,7 +122,7 @@ const resetPassword = async (req, res, next) => {
     user.resetPasswordExpires = undefined
     await user.save()
 
-    return res.status(200).json({ message: "Parol muvaffaqiyatli tiklandi" })
+    return res.status(200).json({ message: "Parol muvaffaqiyatli o'zgartirildi!" })
   } catch (error) {
     return next(BaseError.InternalError("Parolni yangilashda xatolik", error.message))
   }
