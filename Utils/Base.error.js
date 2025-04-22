@@ -22,6 +22,10 @@ class BaseError extends Error {
     static InternalError(message = "Server xatosi") {
       return new BaseError("InternalError", 500, message, true)
     }
+
+    static ServerError(message = "Serverda xatolik yuz berdi") {
+        return new BaseError("ServerError", 500, message, true)
+      }
   }
   
   module.exports = BaseError

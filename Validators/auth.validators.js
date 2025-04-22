@@ -76,4 +76,45 @@ const userValidate = (data) => {
 }
 
 
-module.exports = userValidate
+
+/////////// Login validate
+
+const loginValidator = (data) => {
+    try {
+        const UserSchemaValidateLogin = Joi.object({
+            email: Joi.string()
+                .email({ tlds: { allow: ['com', 'net', 'org'] } })
+                .required()
+                .messages({
+                    'any.required': 'Foydalanuvchi gmaili talab qilinadi!',
+                    'string.base': 'Gmail string bo‘lishi kerak!',
+                    'string.empty': ` Gmail qismini to'ldiring!`,
+                    'string.email': 'Noto‘g‘ri email format kiritdingiz!'
+                }),
+
+            password: Joi.string()
+                .required()
+                .messages({
+                    'any.required': 'Parol kiritish talab qilinadi!',
+                    'string.base': 'Parol string bo‘lishi kerak',
+                    'string.empty': 'Parol talab qilinadi'
+                })
+        })
+
+        const { error } = UserSchemaValidateLogin.validate(data)
+        if (error) {
+            return {
+                error: error.details[0].message
+            }
+        }
+        return { value: data }
+    } catch (error) {
+        return { error: "Foydalanuvchi ma'lumotlarini tekshirishda xatolik" }
+    }
+}
+
+
+module.exports = {
+    userValidate,
+    loginValidator
+}

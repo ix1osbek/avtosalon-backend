@@ -1,4 +1,4 @@
-const userValidate = require("../Validators/auth.validators.js")
+const {userValidate , loginValidator} = require("../Validators/auth.validators.js")
 const BaseError = require("../Utils/Base.error.js")
 
 
@@ -15,5 +15,21 @@ const userValidators = async (req, res, next) => {
 }
 
 
+const loginValidators = async (req , res , next)=>{
+    try {
+        const { error } = await loginValidator(req.body)
+        if (error) {
+            return next(BaseError.BadRequest(400, error.details[0].message))
+        }
+        next()
+    } catch (error) {
+        return next(BaseError.ServerError(500, "Foydalanuvchi ma'lumotlarini tekshirishda xato", error))
+    }
+}
 
-module.exports= userValidators
+
+
+module.exports= {
+    userValidators,
+    loginValidators
+}
