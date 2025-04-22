@@ -16,8 +16,8 @@ const registerUser = async (req, res, next) => {
     const { username, email, password } = req.body
     const existingUser = await UserModel.findOne({ email })
 
-    if (existingUser) {
-      return res.status(400).json({ message: "Bu email allaqachon ro‘yxatdan o‘tgan" })
+    if (existingUser) {  
+      return res.status(400).json({ message: "Bu email allaqachon ro‘yxatdan o‘tgan!" })
     }
     const verificationCode = Math.floor(100000 + Math.random() * 900000).toString()
     const expiresAt = Date.now() + 2 * 60 * 1000
