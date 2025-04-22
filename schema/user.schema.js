@@ -12,8 +12,27 @@ const UserSchema = new mongoose.Schema({
     refreshToken: {
         type: String,
         default: null,
-      },
-}, { timestamps: true , versionKey: false })
+    },
+    isVarified: {
+        type: Boolean,
+        default: false
+    },
+    otp: {
+        type: String,
+        default: 0
+    },
+    otpExpires: {
+        type: Date,
+        required: true
+    },
+    resetPasswordCode: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
+    }
+
+}, { timestamps: true, versionKey: false })
 
 const UserModel = mongoose.model("user", UserSchema)
 

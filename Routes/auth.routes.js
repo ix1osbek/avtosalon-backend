@@ -7,6 +7,10 @@ const {
   getUsers,
   refreshToken,
   logoutUser,
+  verifyUser,
+  forgotPassword,
+  resetPassword,
+  getProfile
 } = require("../controller/auth.controller.js")
 const { protect, authorize } = require("../Middleware/authMiddleware")
 
@@ -16,5 +20,11 @@ router.put("/assign-admin/:id", protect, authorize("superadmin"), assignAdminRol
 router.get("/users", protect, authorize("superadmin"), getUsers)
 router.post("/refresh-token", refreshToken)
 router.post("/logout", protect, logoutUser)
+router.post("/verify" , verifyUser )
+router.post("/forgot_password" , forgotPassword)
+router.post("/reset_password" , resetPassword)
+router.get("/profile" ,protect, getProfile)
+
+
 
 module.exports = router
