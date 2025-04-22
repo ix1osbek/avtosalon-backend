@@ -1,4 +1,4 @@
-const {userValidate , loginValidator} = require("../Validators/auth.validators.js")
+const {userValidate , loginValidator , verifyUserValidator} = require("../Validators/auth.validators.js")
 const BaseError = require("../Utils/Base.error.js")
 
 
@@ -17,6 +17,8 @@ const loginValidators = (req , res , next) => {
     }
     next()
 }
+
+
 
 
 

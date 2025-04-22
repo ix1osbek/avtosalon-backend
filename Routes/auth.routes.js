@@ -1,5 +1,5 @@
 const express = require("express")
-const { userValidators, loginValidators } = require("../Middleware/userMiddleware.js")
+const { userValidators, loginValidators  } = require("../Middleware/userMiddleware.js")
 const router = express.Router()
 const {
   registerUser,
@@ -13,7 +13,7 @@ const {
   resetPassword,
   getProfile
 } = require("../controller/auth.controller.js")
-const { protect, authorize } = require("../Middleware/authMiddleware")
+const { protect, authorize } = require("../Middleware/authMiddleware.js")
 
 router.post("/register", userValidators, registerUser)
 router.post("/login", loginValidators, loginUser)

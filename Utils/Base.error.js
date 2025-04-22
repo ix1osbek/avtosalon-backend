@@ -20,12 +20,19 @@ class BaseError extends Error {
     }
   
     static InternalError(message = "Server xatosi") {
-      return new BaseError("InternalError", 500, message, true)
-    }
+        return new BaseError("InternalError", 500, message, true)
+      }
+      
 
     static ServerError(message = "Serverda xatolik yuz berdi") {
         return new BaseError("ServerError", 500, message, true)
     }
+
+    static Forbidden(message = "Sizda bu amal uchun ruxsat yo‘q") {
+        const error = new BaseError(message, 403);
+        error.name = "Forbidden";
+        return error;
+      }
     
   }
   

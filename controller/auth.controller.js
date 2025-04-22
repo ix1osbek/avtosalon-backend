@@ -73,7 +73,7 @@ const verifyUser = async (req, res, next) => {
 }
 
 
- ////////////// forgot password
+////////////// forgot password
 const forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body
@@ -140,6 +140,10 @@ const loginUser = async (req, res, next) => {
       return next(BaseError.Unauthorized("Email yoki parol noto'g'ri"))
     }
 
+    if(!user.isVarified){
+      return next(BaseError.Unauthorized("Gmailingizni tasdiqlashingiz shart!"))
+    }
+
     const accessToken = generateAccessToken(user)
     const refreshToken = generateRefreshToken(user)
 
@@ -162,7 +166,7 @@ const loginUser = async (req, res, next) => {
       }
     })
   } catch (error) {
-    return next(BaseError.InternalError("Tizimga kirishda xatolik", error.message))
+    return next(BaseError.InternalError("Tizimga kirishda xatolik"))
   }
 }
 
