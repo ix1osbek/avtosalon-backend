@@ -156,13 +156,10 @@ const loginUser = async (req, res, next) => {
     res.status(200).json({
       message: "Tizimga kirdingiz",
       user: {
-        _id: user._id,
-        username: user.username,
         email: user.email,
-        role: user.role,
-      },
-      accessToken,
-      refreshToken,
+        accessToken,
+        refreshToken
+      }
     })
   } catch (error) {
     return next(BaseError.InternalError("Tizimga kirishda xatolik", error.message))
