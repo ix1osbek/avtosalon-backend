@@ -1,4 +1,5 @@
 const nodemailer = require('nodemailer')
+const BaseError = require("./Base.error.js")
 
 
 
@@ -21,7 +22,7 @@ const sendEmail = async (email, code) => {
 
         await transporter.sendMail(mailOptions)
     } catch (error) {
-        console.error('Email yuborishda xatolik:', error)
+        return next(BaseError.ServerError(500, "Email yuborishda xatolik", error))
     }
 }
 

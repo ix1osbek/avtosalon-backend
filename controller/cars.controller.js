@@ -5,203 +5,175 @@ const mongoose = require("mongoose")
 const uploadToImgBB = require("../Utils/uploadToImgBB")
 
 ////////////////////////// POST CAR
-const createcar = async (req, res, next) => {
+const createCar = async (req, res, next) => {
     try {
-        const category = await CategoryModel.findOne({ markasi: req.body.markasi })
-        if (!category) {
-            return res.status(404).json({
-                message: "Moshina markasi topilmadi!"
-            })
-        }
-
-        const carData = {
-            markasi: category._id,
-            model: req.body.model,
-            motor: req.body.motor,
-            color: req.body.color,
-            gearBook: req.body.gearBook,
-            deseriptions: req.body.deseriptions,
-            tanirovkasi: req.body.tanirovkasi,
-            year: req.body.year,
-            distance: req.body.distance,
-            narxi: req.body.narxi,
-            interiorImages: [],
-            exteriorImages: []
-        }
-
-        const car = await CarsModel.create(carData)
-        res.status(201).json({
-            message: "Car added successfully",
-            car
-        })
+      const category = await CategoryModel.findOne({ markasi: req.body.markasi })
+      if (!category) return next(BaseError.NotFound("Moshina markasi topilmadi"))
+  
+      const carData = {
+        markasi: category._id,
+        model: req.body.model,
+        motor: req.body.motor,
+        color: req.body.color,
+        gearBook: req.body.gearBook,
+        deseriptions: req.body.deseriptions,
+        tanirovkasi: req.body.tanirovkasi,
+        year: req.body.year,
+        distance: req.body.distance,
+        narxi: req.body.narxi,
+        interiorImages: [],
+        exteriorImages: []
+      }
+  
+      const car = await CarsModel.create(carData)
+      res.status(201).json({ message: "Yangi avtomabil qo'shildi!", car })
     } catch (error) {
-        return next(BaseError.BadRequest(400, "Error adding a car", error))
+      next(BaseError.BadRequest("Avtomabil qo'shishda xatolik!", error.message))
     }
-};
+  }
+  
 
 ////////////////////// POST INTERIOR IMAGES
 const addInteriorImages = async (req, res, next) => {
     try {
-        const { id } = req.params
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Noto‘g‘ri avtomobil ID" })
-        }
-
-        const car = await CarsModel.findById(id)
-        if (!car) {
-            return res.status(404).json({ message: "Avtomobil topilmadi" })
-        }
-
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: "Rasm fayllari yuklanmadi" })
-        }
-
-        const imageUrls = await uploadToImgBB(req.files)
-        car.interiorImages = [...car.interiorImages, ...imageUrls]
-        await car.save()
-
-        res.status(200).json({
-            message: "Ichki rasmlar yuklandi",
-            car
-        })
+      const { id } = req.params
+      if (!mongoose.Types.ObjectId.isValid(id)) return next(BaseError.BadRequest("Avtomobil ID noto'g'ri!"))
+  
+      const car = await CarsModel.findById(id)
+      if (!car) return next(BaseError.NotFound("Avtomobil topilmadi!"))
+  
+      if (!req.files?.length) return next(BaseError.BadRequest("Ichki rasm fayllari yuklanmadi!"))
+  
+      const imageUrls = await uploadToImgBB(req.files)
+      car.interiorImages.push(...imageUrls)
+      await car.save()
+  
+      res.status(200).json({ message: "Ichki rasmlar yuklandi", car })
     } catch (error) {
-        return next(BaseError.BadRequest(500, "Ichki rasmlarni yuklashda xato", error))
+      next(BaseError.Internal("Ichki rasmlarni yuklashda xatolik", error.message))
     }
-}
-
+  }
+  
 /////////////////// POST EXTERIOR IMAGES
 const addExteriorImages = async (req, res, next) => {
     try {
-        const { id } = req.params
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ message: "Noto‘g‘ri avtomobil ID" })
-        }
-
-        const car = await CarsModel.findById(id)
-        if (!car) {
-            return res.status(404).json({ message: "Avtomobil topilmadi" })
-        }
-
-        if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ message: "Rasm fayllari yuklanmadi" })
-        }
-
-        const imageUrls = await uploadToImgBB(req.files)
-        car.exteriorImages = [...car.exteriorImages, ...imageUrls]
-        await car.save()
-
-        res.status(200).json({
-            message: "Tashqi rasmlar yuklandi",
-            car
-        })
+      const { id } = req.params
+      if (!mongoose.Types.ObjectId.isValid(id)) return next(BaseError.BadRequest("Avtomobil ID noto'g'ri!"))
+  
+      const car = await CarsModel.findById(id)
+      if (!car) return next(BaseError.NotFound("Avtomobil topilmadi!"))
+  
+      if (!req.files?.length) return next(BaseError.BadRequest("Tashqi rasm fayllari yuklanmadi!"))
+  
+      const imageUrls = await uploadToImgBB(req.files)
+      car.exteriorImages.push(...imageUrls)
+      await car.save()
+  
+      res.status(200).json({ message: "Tashqi rasmlar yuklandi!", car })
     } catch (error) {
-        return next(BaseError.BadRequest(500, "Tashqi rasmlarni yuklashda xato", error))
+      next(BaseError.Internal("Tashqi rasmlarni yuklashda xatolik", error.message))
     }
-};
+  }
+  
 
 ///////////////////////////GET CARS
 const getcar = async (req, res, next) => {
     try {
-        const foundetCar = await CarsModel.find().populate("markasi")
-        if (foundetCar.length === 0) {
-            return res.status(404).json({
-                message: "Car not found",
-            })
-        }
-        res.status(200).json(foundetCar)
+      const cars = await CarsModel.find().populate("markasi")
+      if (!cars.length) return next(BaseError.NotFound("Mashinalar topilmadi"))
+      res.status(200).json(cars)
     } catch (error) {
-        return next(BaseError.BadRequest(400, "Error getting a car", error))
+      next(BaseError.Internal("Mashinalarni olishda xato", error.message))
     }
-}
-
+  }
+  
 /////////// GET CAR BY ID
 const getcarbyid = async (req, res, next) => {
     try {
-        const { id } = req.params
-        const foundetCar = await CarsModel.findById(id).populate("markasi")
-        if (!foundetCar) {
-            return res.status(404).json({
-                message: "Car not found",
-            })
-        }
-        res.status(200).json(foundetCar)
+      const { id } = req.params
+      if (!mongoose.Types.ObjectId.isValid(id)) return next(BaseError.BadRequest("Avtomobil ID noto'g'ri"))
+  
+      const car = await CarsModel.findById(id).populate("markasi")
+      if (!car) return next(BaseError.NotFound("Avtomobil topilmadi"))
+  
+      res.status(200).json(car)
     } catch (error) {
-        return next(BaseError.BadRequest(400, "Error getting a car", error))
+      next(BaseError.Internal("Mashina ma'lumotini olishda xatolik", error.message))
     }
-}
+  }
+  
 
 ///////// DELETE CAR
 const deleteCar = async (req, res, next) => {
     try {
-        const { id } = req.params
-        const foundetCar = await CarsModel.findByIdAndDelete(id)
-        if (!foundetCar) {
-            return res.status(404).json({
-                message: "Car not found"
-            });
-        }
-        res.status(200).json({
-            message: `Car with id ${id} deleted successfully`
-        });
+      const { id } = req.params
+      if (!mongoose.Types.ObjectId.isValid(id)) return next(BaseError.BadRequest("Avtomobil ID noto‘g‘ri"))
+  
+      const car = await CarsModel.findByIdAndDelete(id)
+      if (!car) return next(BaseError.NotFound("Mashina topilmadi"))
+  
+      res.status(200).json({ message: `Mashina (${id}) o‘chirildi` })
     } catch (error) {
-        return next(BaseError.BadRequest(400, "Error deleting a car!", error))
+      next(BaseError.Internal("Mashina o‘chirishda xato", error.message))
     }
-}
+  }
+  
 
 ////////// UPDATE CAR
 const updateCar = async (req, res, next) => {
     try {
-        if (req.body.markasi && typeof req.body.markasi === 'string') {
-            const category = await CategoryModel.findOne({ markasi: req.body.markasi })
-            if (!category) {
-                return res.status(400).json({ message: "Bunday marka topilmadi" })
-            }
-            req.body.markasi = category._id
-        }
-
-        const { id } = req.params
-        const foundetCar = await CarsModel.findById(id)
-        if (!foundetCar) {
-            return res.status(404).json({
-                message: "Car not found",
-            });
-        }
-
-        let interiorImages = foundetCar.interiorImages
-        let exteriorImages = foundetCar.exteriorImages
-
-        if (req.files && req.files.interior && req.files.interior.length > 0) {
-            const newInteriorUrls = await uploadToImgBB(req.files.interior)
-            interiorImages = [...interiorImages, ...newInteriorUrls]
-        }
-
-        if (req.files && req.files.exterior && req.files.exterior.length > 0) {
-            const newExteriorUrls = await uploadToImgBB(req.files.exterior)
-            exteriorImages = [...exteriorImages, ...newExteriorUrls]
-        }
-
-        const updateData = {
-            ...req.body,
-            interiorImages,
-            exteriorImages
-        };
-
-        const updatedCar = await CarsModel.findByIdAndUpdate(id, updateData, { new: true, runValidators: true }).populate("markasi")
-        res.status(200).json({
-            message: `Car with id ${id} updated successfully`,
-            car: updatedCar
-        });
+      const { id } = req.params
+      if (!mongoose.Types.ObjectId.isValid(id)) return next(BaseError.BadRequest("Avtomobil ID noto‘g‘ri"))
+  
+      if (req.body.markasi && typeof req.body.markasi === 'string') {
+        const category = await CategoryModel.findOne({ markasi: req.body.markasi })
+        if (!category) return next(BaseError.BadRequest("Bunday marka topilmadi"))
+        req.body.markasi = category._id
+      }
+  
+      const foundCar = await CarsModel.findById(id)
+      if (!foundCar) return next(BaseError.NotFound("Mashina topilmadi"))
+  
+      let interiorImages = foundCar.interiorImages
+      let exteriorImages = foundCar.exteriorImages
+  
+      if (req.files?.interior?.length) {
+        const newInteriorUrls = await uploadToImgBB(req.files.interior)
+        interiorImages.push(...newInteriorUrls)
+      }
+  
+      if (req.files?.exterior?.length) {
+        const newExteriorUrls = await uploadToImgBB(req.files.exterior)
+        exteriorImages.push(...newExteriorUrls)
+      }
+  
+      const updateData = {
+        ...req.body,
+        interiorImages,
+        exteriorImages
+      }
+  
+      const updatedCar = await CarsModel.findByIdAndUpdate(id, updateData, {
+        new: true,
+        runValidators: true
+      }).populate("markasi")
+  
+      res.status(200).json({
+        message: `Mashina (${id}) yangilandi`,
+        car: updatedCar
+      })
     } catch (error) {
-        return next(BaseError.BadRequest(400, "Error updating a car!", error))
+      next(BaseError.Internal("Mashina yangilashda xato", error.message))
     }
-}
+  }
+  
 
 module.exports = {
-    createcar,
+    createCar,
     addInteriorImages,
     addExteriorImages,
     getcar,
     getcarbyid,
     deleteCar,
     updateCar
-};
+}

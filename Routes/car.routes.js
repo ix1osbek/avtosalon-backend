@@ -1,11 +1,11 @@
 const express = require('express')
 const router = express.Router()
-const { createcar, addInteriorImages, addExteriorImages, getcar, getcarbyid, deleteCar, updateCar } = require('../controller/cars.controller')
+const { createCar, addInteriorImages, addExteriorImages, getcar, getcarbyid, deleteCar, updateCar } = require('../controller/cars.controller')
 const upload = require('../Utils/multer.config')
 const { protect, authorize } = require('../Middleware/authMiddleware')
 const carsValidator = require('../Middleware/carsMiddleware')
 
-router.post('/add_car', protect, authorize('admin', 'superadmin'), carsValidator, createcar)
+router.post('/add_car', protect, authorize('admin', 'superadmin'), carsValidator, createCar)
 router.post('/:id/interior-images', protect, authorize('admin', 'superadmin'), upload.array('images', 5), addInteriorImages)
 router.post('/:id/exterior-images', protect, authorize('admin', 'superadmin'), upload.array('images', 5), addExteriorImages)
 router.get('/get_cars', protect, getcar)

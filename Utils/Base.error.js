@@ -1,24 +1,28 @@
-module.exports = class BaseError extends Error {
-    constructor(status, message, errors = []) {
-        super(message);
-        this.status = status;
-        this.errors = errors;
+class BaseError extends Error {
+    constructor(name, statusCode, description, isOperational = true) {
+      super(description)
+      this.name = name
+      this.statusCode = statusCode
+      this.isOperational = isOperational
+      Error.captureStackTrace(this, this.constructor)
     }
-
-    static BadRequest(message = "Bad Request", errors = []) {
-        return new BaseError(400, message, errors);
+  
+    static BadRequest(message, error = '') {
+      return new BaseError("BadRequest", 400, message || `So'rov yaroqsiz!`, true)
     }
-
-    static Unauthorized(message = "Unauthorized", errors = []) {
-        return new BaseError(401, message, errors); // ✅ status kodi 401 deb ko‘rsatilishi kerak
+  
+    static Unauthorized(message = "Ruxsat yo‘q") {
+      return new BaseError("Unauthorized", 401, message, true)
     }
-    
-
-    static NotFound(message = "Not Found", errors = []) {
-        return new BaseError(404, message, errors);
+  
+    static NotFound(message = "Topilmadi") {
+      return new BaseError("NotFound", 404, message, true)
     }
-
-    static Internal(message = "Internal Server Error", errors = []) {
-        return new BaseError(500, message, errors);
+  
+    static InternalError(message = "Server xatosi") {
+      return new BaseError("InternalError", 500, message, true)
     }
-}
+  }
+  
+  module.exports = BaseError
+  

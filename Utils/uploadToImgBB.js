@@ -1,5 +1,6 @@
 const axios = require('axios')
 const FormData = require('form-data')
+const BaseError = require("../Utils/Base.error.js")
 
 const uploadToImgBB = async (files) => {
   const imageUrls = []
@@ -15,10 +16,11 @@ const uploadToImgBB = async (files) => {
       )
       imageUrls.push(response.data.data.url)
     } catch (error) {
-      throw new Error(`ImgBB’ga yuklashda xato: ${error.message}`)
+      return next(BaseError.ServerError(500, `ImgBB’ga yuklashda xato: ${error.message}`, error))
     }
   }
   return imageUrls
 }
+
 
 module.exports = uploadToImgBB

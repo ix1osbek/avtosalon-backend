@@ -80,5 +80,5 @@ carsSchema.set("toJSON", {
         return ret
     }
 })
-
-module.exports = mongoose.model("cars", carsSchema)
+const CarsModel = mongoose.model("cars", carsSchema)
+module.exports = CarsModel

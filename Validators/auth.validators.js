@@ -7,8 +7,9 @@ const userValidate = (data) => {
                 .min(3).max(30)
                 .required()
                 .messages({
+                    'any.required': 'Foydalanuvchi ismi talab qilinadi',
                     'string.base': 'Foydalanuvchi ismi string bo‘lishi kerak',
-                    'string.empty': 'Foydalanuvchi ismi talab qilinadi',
+                    'string.empty': `Foydalanuvchi ismi qismi bo'sh bo'lmasligi kerak!`,
                     'string.min': 'Foydalanuvchi ismi kamida 3 belgidan iborat bo‘lishi kerak',
                     'string.max': 'Foydalanuvchi ismi 30 belgidan oshmasligi kerak'
                 }),
@@ -17,14 +18,16 @@ const userValidate = (data) => {
                 .email({ tlds: { allow: ['com', 'net', 'org'] } })
                 .required()
                 .messages({
-                    'string.base': 'Email string bo‘lishi kerak',
-                    'string.empty': 'Email talab qilinadi',
-                    'string.email': 'Noto‘g‘ri email format'
+                    'any.required': 'Foydalanuvchi gmaili talab qilinadi!',
+                    'string.base': 'Gmail string bo‘lishi kerak!',
+                    'string.empty': ` Gmail qismini to'ldiring!`,
+                    'string.email': 'Noto‘g‘ri email format kiritdingiz!'
                 }),
 
             password: Joi.string()
                 .required()
                 .messages({
+                    'any.required': 'Parol kiritish talab qilinadi!',
                     'string.base': 'Parol string bo‘lishi kerak',
                     'string.empty': 'Parol talab qilinadi'
                 }),
@@ -48,7 +51,6 @@ const userValidate = (data) => {
                 }),
 
             otpExpires: Joi.date(),
-          
 
             resetPasswordCode: Joi.string()
                 .alphanum()
@@ -59,12 +61,19 @@ const userValidate = (data) => {
 
             resetPasswordExpires: Joi.date()
                 .optional()
-
         })
-        return UserSchemaValidate.validate(data)
+
+        const { error } = UserSchemaValidate.validate(data)
+        if (error) {
+            return {
+                error: error.details[0].message
+            }
+        }
+        return { value: data }
     } catch (error) {
-
+        return { error: "Foydalanuvchi ma'lumotlarini tekshirishda xatolik" }
     }
-
 }
+
+
 module.exports = userValidate
